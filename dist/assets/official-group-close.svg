@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 2147214143">
+<foreignObject x="-4" y="-4" width="44" height="44"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(2px);clip-path:url(#bgblur_0_0_190_clip_path);height:100%;width:100%"></div></foreignObject><circle id="&#229;&#133;&#179;&#233;&#151;&#173;&#230;&#140;&#137;&#233;&#146;&#174;&#229;&#156;&#134;&#229;&#189;&#162;&#232;&#131;&#140;&#230;&#153;&#175;" data-figma-bg-blur-radius="4" cx="18" cy="18" r="18" fill="white" fill-opacity="0.3"/>
+<g id="x-02">
+<path id="Icon" d="M24 12L12 24M24 24L12 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="bgblur_0_0_190_clip_path" transform="translate(4 4)"><circle cx="18" cy="18" r="18"/>
+</clipPath></defs>
+</svg>
