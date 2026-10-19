@@ -25,7 +25,10 @@ body.is-home{background:radial-gradient(ellipse 420px 360px at 50% 0,#823e2a 0,#
 .topic-discovery .topic-rail a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* Keep search and channel navigation visible while the content scrolls. */
 #header,#header.home-header{position:sticky;top:0;z-index:30;background:var(--bg)}
-.is-home #header{background:linear-gradient(115deg,#503027,#693d2e 55%,#4b3028)}
+.is-home #header{height:auto;padding-top:10px;padding-bottom:8px;background:transparent;transition:background-color .18s ease,box-shadow .18s ease}
+.is-home #header.is-scrolled{background:var(--bg);box-shadow:0 1px 0 #ffffff08}
+@media(prefers-reduced-motion:reduce){.is-home #header{transition:none}}
+.is-home .utility-row{margin-bottom:6px}
 /* Compact topics: two swipeable rows, without a nested panel. */
 .topic-discovery{margin:3px 0 22px;padding:0;background:transparent;border:0;border-radius:0}
 .topic-heading{margin-bottom:10px;gap:10px}
