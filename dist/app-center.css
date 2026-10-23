@@ -53,7 +53,7 @@ body.is-app-category #header,body.is-app-category #footer,body.is-app-category .
 /* Four apps per row; the whole tile is the touch target. */
 .app-category-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 12px;padding-top:16px}
 .app-category-item{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;width:100%;padding:0;border:0;background:transparent;color:var(--text);text-align:center}
-.app-category-item .app-tile-icon{width:100%;max-width:80px;height:auto;aspect-ratio:1;border-radius:16px}
+.app-category-item .app-tile-icon{width:68px;max-width:100%;height:auto;aspect-ratio:1;border-radius:12px}
 .app-category-name{display:block;max-width:100%;font-size:13px;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .app-category-item:active{transform:scale(.98)}
 .app-category-item:focus-visible,.app-category-heading>a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:8px}
@@ -71,5 +71,5 @@ body.is-app-category #header,body.is-app-category #footer,body.is-app-category .
 .app-preview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 12px}
 .app-center .app-preview-grid .app-tile{flex-direction:column;gap:8px;min-height:0;padding:0;text-align:center}
 .app-center .app-preview-grid .app-tile:before{display:none}
-.app-center .app-preview-grid .app-tile .app-tile-icon{width:100%;height:auto;aspect-ratio:1;flex:0 0 auto;border-radius:16px}
+.app-center .app-preview-grid .app-tile .app-tile-icon{width:68px;height:68px;aspect-ratio:1;flex:0 0 68px;border-radius:12px}
 .app-center .app-preview-grid .app-tile-name{font-size:13px;line-height:20px;font-weight:400}

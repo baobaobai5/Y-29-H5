@@ -27,7 +27,7 @@ for(const b of catalog.banners.filter(b=>b.link.startsWith('/movie/detail/'))){t
 test.navigate('/movie/list?cat_id=15');assert(element('#app').innerHTML.includes('movie-card'),'Documentary category empty');
 console.log(`Validated: ${test.getMovies().length} films, ${catalog.themeDetails.length} topics, ${urls.size} local assets; search, empty state, escaping, filters, detail, episodes, favorites, history and banner routes.`);
 
-const rankViews=[];for(const period of ['year','month','week']){test.rank('电影',period);const html=element('#app').innerHTML;assert(html.includes('data-rank-period="'+period+'" aria-pressed="true"'));assert.equal(test.getRankState().period,period);rankViews.push(html)}assert.equal(new Set(rankViews).size,3);test.rank('综艺');assert.equal(test.getRankState().period,'week');assert.equal(test.getRankState().cat,'综艺');assert.equal(test.periodHeat({id:'demo',heat:'1.2w'},'year'),12000);console.log('Validated ranking period selection, category preservation, and heat units.');
+const rankViews=[];for(const period of ['year','month','week']){test.rank('电影',period);const html=element('#app').innerHTML;assert(!html.includes('class="rank-periods"'));assert.equal(test.getRankState().period,period);rankViews.push(html)}assert.equal(new Set(rankViews).size,3);test.rank('综艺');assert.equal(test.getRankState().period,'week');assert.equal(test.getRankState().cat,'综艺');assert.equal(test.periodHeat({id:'demo',heat:'1.2w'},'year'),12000);console.log('Validated ranking period selection, category preservation, and heat units.');
 
 test.rank('电影','month',1);const rankFirst=element('#app').innerHTML;assert.equal((rankFirst.match(/class="rank-item"/g)||[]).length,30);test.rank('电影','month',2);const rankSecond=element('#app').innerHTML;assert(rankSecond.includes('class="rank-number">31</span>'));assert(!rankSecond.includes('class="rank-number">1</span>'));assert.equal(test.getRankState().page,2);test.rank('电影','week');assert.equal(test.getRankState().page,1);test.rank('电影','week',999);const totalMovies=test.getMovies().filter(m=>m.category==='电影').length;assert.equal(test.getRankState().page,Math.ceil(totalMovies/30));assert.equal((element('#app').innerHTML.match(/class="rank-item"/g)||[]).length,totalMovies%30||30);console.log('Validated ranking pagination: 30 rows, continuous ranks, filter reset and last-page bounds.');
 
@@ -46,12 +46,13 @@ test.navigate('/search?q='+encodeURIComponent('醒来'));assert.equal((element('
 
 test.navigate('/');
 const categoryLinks=[...element('#header').innerHTML.matchAll(/href="([^\"]*cat_id=[^\"]*)"/g)].map(m=>m[1].replaceAll('&amp;','&'));
-assert(categoryLinks.length>0,'Mobile navigation should expose categories');
+assert(!element('#header').innerHTML.includes('h5-tabs'),'Top category tabs should be removed');
+assert(element('#header').innerHTML.includes('aria-label="打开分类菜单"'),'Categories should remain available through the menu');
 for(const url of categoryLinks){test.navigate(url);assert(element('#app').innerHTML.includes('filter-panel'),'Category route should render filters')}
-assert(element('#footer').innerHTML.includes('bottom-nav'));
+assert.equal(element('#footer').innerHTML,'');
 console.log('Validated mobile categories and bottom navigation.');
 
-test.navigate('/apps');assert(!element('#header').innerHTML.includes('h5-tabs'));assert(element('#app').innerHTML.includes('应用中心'));assert.equal((element('#app').innerHTML.match(/class="app-tile"/g)||[]).length,24);assert(element('#footer').innerHTML.includes('/movie/rank')&&element('#footer').innerHTML.includes('应用中心'));console.log('Validated application center route and 24 preview application entries.');
+test.navigate('/apps');assert(!element('#header').innerHTML.includes('h5-tabs'));assert(element('#app').innerHTML.includes('应用中心'));assert.equal((element('#app').innerHTML.match(/class="app-tile"/g)||[]).length,24);assert.equal(element('#footer').innerHTML,'');console.log('Validated application center route and 24 preview application entries.');
 
 for(const category of ['游戏','福利']){test.navigate('/apps?category='+encodeURIComponent(category));const count=(element('#app').innerHTML.match(/class="app-tile"/g)||[]).length;assert(count>0&&count<80,'Application category must filter items');}
 
