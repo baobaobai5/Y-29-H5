@@ -3,7 +3,7 @@ import vm from 'node:vm';
 import assert from 'node:assert/strict';
 import {showCoinRecharge} from '../dist/coin-recharge.js';
 const catalog=JSON.parse(fs.readFileSync('dist/catalog.json','utf8'));
-const source=fs.readFileSync('dist/app.js','utf8').replace("import {showCoinRecharge} from './coin-recharge.js';",'');
+const source=fs.readFileSync('dist/app.js','utf8').replace("import {showImageSearch} from './image-search.js';",'').replace("import {showCoinRecharge} from './coin-recharge.js';",'');
 const required=['dist/index.html','dist/styles.css','dist/app.js','dist/catalog.json'];
 for(const file of required)assert(fs.statSync(file).size>0,file);
 const urls=new Set();function assets(x){if(typeof x==='string'&&x.startsWith('/assets/'))urls.add(x);else if(Array.isArray(x))x.forEach(assets);else if(x&&typeof x==='object')Object.values(x).forEach(assets)}assets(catalog);
@@ -13,6 +13,7 @@ const storage=new Map(),location={pathname:'/',search:'',href:'http://localhost:
 const setUrl=url=>{const u=new URL(url,location.href);Object.assign(location,{pathname:u.pathname,search:u.search,href:u.href})};
 const context={console,URL,URLSearchParams,Map,Set,AbortController,document:{body:element("body"),querySelector:element,querySelectorAll:()=>[],addEventListener(){}},location,history:{pushState:(a,b,url)=>setUrl(url),replaceState:(a,b,url)=>setUrl(url)},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},fetch:async()=>({ok:true,json:async()=>structuredClone(catalog)}),matchMedia:()=>({matches:true}),setInterval:()=>1,clearInterval(){},setTimeout:()=>1,clearTimeout(){},window:{addEventListener(){},scrollTo(){}},navigator:{}};
 context.showCoinRecharge=showCoinRecharge;
+context.sessionStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};
 await vm.runInNewContext('(async()=>{'+source+';globalThis.test={rank,periodHeat,getRankState:()=>rankState,navigate,actions,listing,renderListing,themePage,read,getMovies:()=>movies,getCurrent:()=>currentMovie};})()',context);
 const test=context.test;assert(test,'Application initialization failed');assert(element('#app').innerHTML.includes('推荐影片轮播'));
 for(const path of ['/movie/list?cat_id=13','/movie/list?cat_id=14','/movie/rank','/mine/help','/mine/favorites','/mine/history']){test.navigate(path);assert(element('#app').innerHTML.length>100,path)}
@@ -63,3 +64,18 @@ for(const [path,marker] of [['/','sk-hero'],['/movie/list','sk-filters'],['/sear
 console.log('Validated skeleton layouts for all page routes.');
 
 test.navigate('/apps/category?category='+encodeURIComponent('工具'));assert(!element('#app').innerHTML.includes('class="app-category-item"'));assert(element('#app').innerHTML.includes('该类别暂无应用，敬请期待'));
+
+// Image-result routes use persisted matches, without text-search demo duplication.
+const imageIds=test.getMovies().slice(0,3).map(m=>m.id);
+storage.set('image-search:fixture',JSON.stringify({ids:imageIds,preview:'data:image/png;base64,AA==',type:'long'}));
+test.navigate('/search?image=fixture');
+assert.equal((element('#app').innerHTML.match(/class="movie-card"/g)||[]).length,3);
+assert(element('#app').innerHTML.includes('以图搜图结果'));
+assert(element('#app').innerHTML.includes('data-action="image-enlarge"'));
+assert(!element('#app').innerHTML.includes('filter-panel'));
+test.navigate('/search?image=fixture&sort='+encodeURIComponent('评分高低'));
+assert.equal((element('#app').innerHTML.match(/class="movie-card"/g)||[]).length,3);
+test.navigate('/search?image=expired');
+assert(element('#app').innerHTML.includes('图片记录已失效'));
+assert(!element('#app').innerHTML.includes('class="movie-card"'));
+console.log('Validated image-search persistence, sorting, filter omission and expired-session recovery.');
