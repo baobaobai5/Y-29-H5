@@ -1,0 +1,64 @@
+/* Shared PC exchange flow, sized for the existing mobile dark theme. */
+#modal:has(.ai-entry-content){--text-secondary:#b8bac2;width:calc(100% - 32px);max-width:448px;max-height:calc(100dvh - 32px);box-sizing:border-box;margin:auto;padding:24px 20px;overflow-y:auto;border-radius:16px;background:#24262b;color:#f4f4f5;font-family:inherit}
+#modal:has(.ai-entry-content) .close-modal{top:8px;right:8px;width:44px;height:44px}
+body:has(#modal[open] .ai-entry-content){overflow:hidden}
+.ai-exchange-heading{gap:10px;margin-bottom:24px;padding-right:28px;align-items:flex-start}
+.ai-exchange-heading h2{font-size:20px;line-height:28px;margin:0 0 6px}
+.ai-exchange-heading p,.ai-entry-content p{font-size:14px;line-height:22px;color:#b8bac2}
+.ai-exchange-symbol{width:32px;height:32px}
+.ai-exchange label{font-size:14px;line-height:22px;color:#b8bac2}
+.ai-amount-field{height:48px;padding:0 12px}
+.ai-amount-field input{font-size:16px;line-height:24px;height:44px}
+.ai-exchange-hints{display:flex;flex-direction:row;align-items:baseline;justify-content:space-between;gap:8px;margin:8px 0 16px}
+.ai-exchange-hints #ai-exchange-rate,.ai-exchange-hints #ai-exchange-error{font-size:14px;line-height:22px}
+.ai-exchange-hints #ai-exchange-rate{flex-shrink:0;text-align:left}
+.ai-exchange-hints #ai-exchange-error{min-width:0;margin-left:auto;text-align:right;overflow-wrap:anywhere}
+.ai-exchange-stats{gap:10px;margin-bottom:20px}
+.ai-exchange-stat,.ai-exchange-stat:has([data-ai-recharge]){min-width:0;padding:12px}
+.ai-exchange-stat>span,.ai-exchange-stat small{font-size:13px;line-height:20px}
+.ai-exchange-stat strong{font-size:24px;line-height:32px}
+.ai-exchange-stat p{gap:4px}
+.ai-exchange-stat .ai-exchange-account{position:static;transform:none;margin-top:12px}
+.ai-exchange-account button{min-height:44px;font-size:14px}
+.ai-exchange-actions{gap:10px;padding-top:16px}
+.ai-exchange-actions button,.ai-exchange-success button{height:48px;font-size:16px;line-height:24px}
+.ai-exchange-success h2{font-size:20px;line-height:28px}
+.ai-exchange-success small{font-size:13px;line-height:20px}
+.ai-exchange button:active:not(:disabled){transform:scale(.98)}
+#modal:has(.coin-recharge){width:calc(100% - 24px);max-width:456px;padding:24px 16px}
+#modal .coin-recharge{display:flex;flex-direction:column;min-height:0;width:100%}
+#modal .recharge-sidebar{width:auto;padding:24px 0 16px;border-right:0}
+#modal .recharge-sidebar nav{display:flex;gap:8px}
+#modal .recharge-sidebar nav button{min-height:44px;font-size:14px;padding:8px}
+#modal .recharge-main{min-width:0;padding:0}
+#modal .recharge-heading h2{font-size:20px;line-height:28px}
+#modal .recharge-heading p{font-size:14px;line-height:22px}
+#modal .recharge-tiers{grid-template-columns:repeat(2,minmax(0,1fr))}
+#modal .recharge-payment>div{flex-wrap:wrap}
+#modal .recharge-pay{min-height:48px;font-size:16px}
+#modal .coin-records-scroll{overflow:auto;max-height:40dvh}
+@media(prefers-reduced-motion:reduce){#modal[open]:has(.ai-entry-content){animation:none}.ai-exchange button:active:not(:disabled){transform:none}}
+
+/* Compact exchange dialog; recharge stays beside the input label. */
+#modal:has(.ai-exchange){width:calc(100% - 48px);max-width:328px;padding:20px 16px}
+.ai-exchange-heading{margin-bottom:12px;gap:8px}
+.ai-exchange-heading p{font-size:13px;line-height:20px}
+.ai-exchange-input-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.ai-exchange-input-heading label{margin:0}
+.ai-exchange-input-heading .ai-exchange-account{margin:0}
+.ai-exchange-input-heading .ai-exchange-account button{height:44px;min-height:44px;padding:0 8px;border:0;background:transparent;color:var(--accent)}
+.ai-exchange-stats{gap:8px;margin-bottom:16px}
+.ai-exchange-stat{padding:10px;border-radius:10px}
+.ai-exchange-stat>span,.ai-exchange-stat small{font-size:12px;line-height:18px}
+.ai-exchange-stat strong{font-size:20px;line-height:28px}
+.ai-exchange-stat p{margin:4px 0 0;gap:4px}
+.ai-exchange-hints{margin-bottom:12px;gap:6px}
+.ai-exchange-hints #ai-exchange-rate,.ai-exchange-hints #ai-exchange-error{font-size:12px;line-height:20px}
+.ai-exchange-actions{padding-top:12px;gap:8px}
+.ai-exchange-actions button{height:44px;font-size:15px}
+/* Keep coin glyphs optically centered beside labels and input text. */
+.ai-exchange .ai-coin-symbol{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;line-height:1;padding:0;font-family:Arial,sans-serif;font-weight:400;vertical-align:middle}
+.ai-exchange .ai-amount-field>.ai-coin-symbol{width:20px;height:20px;font-size:12px;align-self:center}
+.ai-exchange .ai-exchange-stat>span{display:flex;align-items:center;gap:6px;min-height:20px;line-height:20px}
+.ai-exchange .ai-exchange-stat>span>.ai-coin-symbol{width:14px;height:14px;font-size:9px;align-self:center}
+.ai-exchange .ai-exchange-stat>span>img{display:block;width:14px;height:14px;object-fit:contain;flex-shrink:0;align-self:center}

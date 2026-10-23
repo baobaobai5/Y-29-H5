@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
+import {showCoinRecharge} from '../dist/coin-recharge.js';
 const catalog=JSON.parse(fs.readFileSync('dist/catalog.json','utf8'));
-const source=fs.readFileSync('dist/app.js','utf8');
+const source=fs.readFileSync('dist/app.js','utf8').replace("import {showCoinRecharge} from './coin-recharge.js';",'');
 const required=['dist/index.html','dist/styles.css','dist/app.js','dist/catalog.json'];
 for(const file of required)assert(fs.statSync(file).size>0,file);
 const urls=new Set();function assets(x){if(typeof x==='string'&&x.startsWith('/assets/'))urls.add(x);else if(Array.isArray(x))x.forEach(assets);else if(x&&typeof x==='object')Object.values(x).forEach(assets)}assets(catalog);
@@ -11,6 +12,7 @@ const els=new Map();function element(key){if(!els.has(key))els.set(key,{innerHTM
 const storage=new Map(),location={pathname:'/',search:'',href:'http://localhost:5173/'};
 const setUrl=url=>{const u=new URL(url,location.href);Object.assign(location,{pathname:u.pathname,search:u.search,href:u.href})};
 const context={console,URL,URLSearchParams,Map,Set,AbortController,document:{body:element("body"),querySelector:element,querySelectorAll:()=>[],addEventListener(){}},location,history:{pushState:(a,b,url)=>setUrl(url),replaceState:(a,b,url)=>setUrl(url)},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},fetch:async()=>({ok:true,json:async()=>structuredClone(catalog)}),matchMedia:()=>({matches:true}),setInterval:()=>1,clearInterval(){},setTimeout:()=>1,clearTimeout(){},window:{addEventListener(){},scrollTo(){}},navigator:{}};
+context.showCoinRecharge=showCoinRecharge;
 await vm.runInNewContext('(async()=>{'+source+';globalThis.test={rank,periodHeat,getRankState:()=>rankState,navigate,actions,listing,renderListing,themePage,read,getMovies:()=>movies,getCurrent:()=>currentMovie};})()',context);
 const test=context.test;assert(test,'Application initialization failed');assert(element('#app').innerHTML.includes('推荐影片轮播'));
 for(const path of ['/movie/list?cat_id=13','/movie/list?cat_id=14','/movie/rank','/mine/help','/mine/favorites','/mine/history']){test.navigate(path);assert(element('#app').innerHTML.length>100,path)}
@@ -49,12 +51,14 @@ for(const url of categoryLinks){test.navigate(url);assert(element('#app').innerH
 assert(element('#footer').innerHTML.includes('bottom-nav'));
 console.log('Validated mobile categories and bottom navigation.');
 
-test.navigate('/apps');assert(!element('#header').innerHTML.includes('h5-tabs'));assert(element('#app').innerHTML.includes('应用中心'));assert.equal((element('#app').innerHTML.match(/class="app-tile"/g)||[]).length,80);assert(element('#footer').innerHTML.includes('/movie/rank')&&element('#footer').innerHTML.includes('应用中心'));console.log('Validated application center route and 80 application entries.');
+test.navigate('/apps');assert(!element('#header').innerHTML.includes('h5-tabs'));assert(element('#app').innerHTML.includes('应用中心'));assert.equal((element('#app').innerHTML.match(/class="app-tile"/g)||[]).length,24);assert(element('#footer').innerHTML.includes('/movie/rank')&&element('#footer').innerHTML.includes('应用中心'));console.log('Validated application center route and 24 preview application entries.');
 
-for(const category of ['游戏','工具','福利']){test.navigate('/apps?category='+encodeURIComponent(category));const count=(element('#app').innerHTML.match(/class="app-tile"/g)||[]).length;assert(count>0&&count<80,'Application category must filter items');}
+for(const category of ['游戏','福利']){test.navigate('/apps?category='+encodeURIComponent(category));const count=(element('#app').innerHTML.match(/class="app-tile"/g)||[]).length;assert(count>0&&count<80,'Application category must filter items');}
 
-test.navigate('/apps?category='+encodeURIComponent('任务'));assert(!element('#app').innerHTML.includes('class="app-tile"'));assert(element('#app').innerHTML.includes('/assets/app-task-empty.png'));assert(element('#app').innerHTML.includes('阿偶，没有找到您想要的内容哦~'));test.navigate('/apps');assert.equal((element('#app').innerHTML.match(/class="app-tile"/g)||[]).length,80);console.log('Validated task empty state and return to recommended apps.');
+test.navigate('/apps?category='+encodeURIComponent('任务'));assert(!element('#app').innerHTML.includes('class="app-tile"'));assert(element('#app').innerHTML.includes('/assets/app-task-empty.png'));assert(element('#app').innerHTML.includes('阿偶，没有找到您想要的内容哦~'));test.navigate('/apps');assert.equal((element('#app').innerHTML.match(/class="app-tile"/g)||[]).length,24);console.log('Validated task empty state and return to recommended apps.');
 
 const skeletonSource=fs.readFileSync('dist/skeleton.js','utf8');
 for(const [path,marker] of [['/','sk-hero'],['/movie/list','sk-filters'],['/search','sk-filters'],['/movie/rank','sk-ranks'],['/movie/detail/demo','sk-detail'],['/mine/favorites','sk-profile'],['/mine/history','sk-profile'],['/mine/help','sk-heading'],['/apps','sk-apps'],['/theme-detail/demo','sk-banner']]){setUrl(path);vm.runInNewContext(skeletonSource,context);assert(element('#app').innerHTML.includes(marker),'Missing skeleton for '+path);assert(element('#app').innerHTML.includes('role="status"'));}
 console.log('Validated skeleton layouts for all page routes.');
+
+test.navigate('/apps/category?category='+encodeURIComponent('工具'));assert(!element('#app').innerHTML.includes('class="app-category-item"'));assert(element('#app').innerHTML.includes('该类别暂无应用，敬请期待'));

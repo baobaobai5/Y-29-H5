@@ -1,0 +1,61 @@
+/* Mobile type scale. Text uses rem; icon glyph sizes remain independent. */
+:root{--font-caption:.75rem;--font-body:.875rem;--font-input:1rem;--font-section:1.125rem;--font-title:1.25rem;--font-headline:1.375rem}
+html{font-size:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-size:var(--font-body);line-height:1.5}
+/* Shared page and section hierarchy. */
+body :is(.theme-detail-heading,.invite-heading h1,.personal-center .invite-heading h1){font-size:var(--font-section);line-height:1.5}
+body :is(.section-title h2,.catalog-section h2,.topic-heading h2,.theme-other-topics h2,.page-history-heading h2,.episodes-head h2,.search-trending h2){font-size:var(--font-section)!important;line-height:1.5!important}
+body :is(.page>h1,.detail-info h1,.profile-account h1){font-size:var(--font-title);line-height:1.4}
+body .hero-copy h1{font-size:var(--font-section)!important;line-height:1.5!important}
+body :is(.card-title,.is-home .feature-track .card-title,.rank-title-row h3,.app-promotion-copy h2){font-size:var(--font-body)!important;line-height:1.5!important}
+body :is(.card-meta,.duration,.score,.detail-meta,.profile-account p,.invitation-record-time){font-size:var(--font-caption)!important;line-height:1.5!important}
+body :is(.profile-menu>a,.profile-menu>button,.settings-page .settings-row,.drawer-categories a,.drawer-tools strong,.drawer-secondary a,.compact-menu>a,.compact-menu>button){font-size:var(--font-body);line-height:1.5}
+body :is(.bottom-nav a,.bottom-nav button,.bottom-vip small,.profile-shortcuts button){font-size:var(--font-caption);line-height:1.5}
+body .bottom-nav{height:calc(72px + env(safe-area-inset-bottom))}
+body{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+/* Fields keep a readable 16px size, including placeholders. */
+body :is(input:not([type=range]):not([type=checkbox]):not([type=radio]),textarea){font-size:var(--font-input)!important;line-height:1.5}
+body :is(input,textarea)::placeholder{font-size:inherit!important}
+body :is(.primary,.invite-submit,.account-submit,.redeem-confirm,.identity-save,.feedback-submit){font-size:var(--font-input);line-height:1.5;min-height:44px}
+body :is(dialog h2,.feedback-sheet .feedback-panel h2,.identity-heading h2,.cache-content h2,.redeem-content h2){font-size:var(--font-section);line-height:1.5}
+body :is(.feedback-intro,.feedback-local-note,.filter-dialog-hint,.line-modal .hint,.identity-note,.identity-warning,#invite-note,.account-password-note,.redeem-error,.account-format-error){font-size:var(--font-caption);line-height:1.6;overflow-wrap:anywhere}
+body :is(.feedback-choice-body strong,.official-group-label,.identity-copy,.line-options button,.all-episodes-grid button,.episode-grid>button){font-size:var(--font-body);line-height:1.5}
+body :is(.feedback-choice-body small,.remaining,.action-bar>button,.action-bar .action-label-count){font-size:var(--font-caption);line-height:1.5}
+body :is(.rank-empty p,.empty p,.page-history-empty){font-size:var(--font-body);line-height:1.6}
+/* Text containers must expand when labels wrap or browser text size increases. */
+body .content-tags{max-height:none;min-height:24px}
+body .section-title{height:auto;min-height:27px}
+body .filter-label{width:40px!important;flex-basis:40px!important;line-height:1.5}
+body .feedback-choice-body{height:auto;min-height:60px}
+body .search-capsule{font-size:var(--font-body);line-height:1.5}
+body .theme-hero-copy .theme-description{font-size:var(--font-body);line-height:1.6}
+body .page-history-tag{height:auto}
+@media(max-width:360px){
+ body .h5-tabs{gap:16px}
+ body .theme-other-topics nav{grid-template-columns:1fr}
+ body .action-bar{gap:2px}
+ body .action-bar>button{min-width:0;padding-inline:2px}
+}
+
+/* Category empty illustration: preserve the uploaded square artwork. */
+body :is(.category-empty,.search-empty) img{width:112px;height:112px;max-width:50%;object-fit:contain}
+
+/* Reduce empty-state illustrations one size step across all views. */
+body .rank-empty:not(.category-empty):not(.search-empty) img{width:88px;max-width:40%;height:auto;object-fit:contain}
+
+/* Search history matches the reference panel and 40px pill rows. */
+body.is-search .page-search-history{padding:10px 10px 20px;background:transparent;border-radius:10px}
+body.is-search .page-history-heading{height:21px;margin-bottom:10px}
+body.is-search .page-history-heading h2{font-size:15px!important;line-height:21px!important;font-weight:700;color:#f4f4f5}
+body.is-search .page-history-heading>button{display:grid;place-items:center;width:20px;height:20px;min-height:0;padding:0}
+body.is-search .page-history-heading img{display:block;width:20px;height:20px}
+body.is-search .page-history-tags{flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:10px!important}
+body.is-search .page-history-tag{height:40px;min-height:40px;max-width:100%;gap:6px;padding:0 20px!important;box-sizing:border-box;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(119,126,133,.3);color:#fff}
+body.is-search .page-history-tag a{display:block;min-height:0;height:auto;min-width:0;padding:0;box-sizing:border-box;font-size:14px;line-height:19.6px;letter-spacing:-.28px;color:#fff}
+body.is-search .page-history-tag button{display:flex;align-items:center;justify-content:flex-end;flex:0 0 21px;width:21px;min-width:21px;height:18px;min-height:0;padding:0;border-left:1px solid rgba(119,126,133,.2);border-radius:0;box-sizing:border-box}
+body.is-search .page-history-tag button img{display:block;width:10px;height:10px}
+
+/* Search landing page synced with Figma 236:54855. */
+body.is-search .search-discovery .home-ad-row .ad-label{display:none}
+body.is-search .search-trending h2{font-weight:700}
+body.is-search .trending-number{font-style:normal;font-weight:700}
